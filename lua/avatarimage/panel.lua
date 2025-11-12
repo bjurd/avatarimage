@@ -119,9 +119,6 @@ end
 function PANEL:LoadAvatar()
 	self:SetLoadingAvatar(true)
 	self:SetTryLoad(true)
-
-	self:InvalidateLayout()
-	self:Think()
 end
 
 vgui.Register("AvatarImageEx", PANEL, "EditablePanel")
