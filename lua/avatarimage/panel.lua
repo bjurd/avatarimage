@@ -124,10 +124,4 @@ function PANEL:LoadAvatar()
 	self:Think()
 end
 
---- @param Width number
---- @param Height number
-function PANEL:PerformLayout(Width, Height)
-	-- hi!
-end
-
 vgui.Register("AvatarImageEx", PANEL, "EditablePanel")
