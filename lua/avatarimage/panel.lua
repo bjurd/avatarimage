@@ -13,11 +13,14 @@ AccessorFunc(PANEL, "m_bTryLoad", "TryLoad", FORCE_BOOL)
 function PANEL:Init()
 	self:SetPaintBackgroundEnabled(false)
 	self:SetPaintBorderEnabled(false)
+	self:SetText("")
 
 	self:SetPlayerSteamID("0")
 
 	self:SetLoadingAvatar(false)
 	self:SetTryLoad(false)
+
+	self:LoadAvatar()
 end
 
 --- @param SteamID64 string
@@ -117,8 +120,16 @@ end
 
 --- Makes the panel (re)load the avatar
 function PANEL:LoadAvatar()
-	self:SetLoadingAvatar(true)
-	self:SetTryLoad(true)
+	local HTML = self:EnsureHTML()
+
+	if HTML then
+		HTML:OpenURL(Steam.GetDefaultAvatar())
+	end
+
+	if self:GetPlayerSteamID() ~= "0" then
+		self:SetLoadingAvatar(true)
+		self:SetTryLoad(true)
+	end
 end
 
 vgui.Register("AvatarImage", PANEL, "EditablePanel")
