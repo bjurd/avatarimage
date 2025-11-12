@@ -9,6 +9,7 @@ AccessorFunc(PANEL, "m_strSteamID", "PlayerSteamID", FORCE_STRING)
 
 AccessorFunc(PANEL, "m_bLoadingAvatar", "LoadingAvatar", FORCE_BOOL)
 AccessorFunc(PANEL, "m_bTryLoad", "TryLoad", FORCE_BOOL)
+AccessorFunc(PANEL, "m_iLoadAttempts", "LoadAttempts", FORCE_NUMBER)
 
 function PANEL:Init()
 	self:SetPaintBackgroundEnabled(false)
@@ -19,6 +20,7 @@ function PANEL:Init()
 
 	self:SetLoadingAvatar(false)
 	self:SetTryLoad(false)
+	self:SetLoadAttempts(0)
 
 	self:LoadAvatar()
 end
@@ -84,6 +86,15 @@ end
 
 function PANEL:TryLoad()
 	self:SetTryLoad(false)
+	self:SetLoadAttempts(self:GetLoadAttempts() + 1)
+
+	if self:GetLoadAttempts() > 4 then
+		-- Bail after so many failures
+		self:SetLoadingAvatar(false)
+		self:SetTryLoad(false)
+
+		return
+	end
 
 	Steam.FetchAvatar(self:GetPlayerSteamID(), function(AvatarURL)
 		if not IsValid(self) then return end
@@ -127,6 +138,8 @@ function PANEL:LoadAvatar()
 	end
 
 	if self:GetPlayerSteamID() ~= "0" then
+		self:SetLoadAttempts(0)
+
 		self:SetLoadingAvatar(true)
 		self:SetTryLoad(true)
 	end
