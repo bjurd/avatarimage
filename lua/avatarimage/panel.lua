@@ -121,4 +121,4 @@ function PANEL:LoadAvatar()
 	self:SetTryLoad(true)
 end
 
-vgui.Register("AvatarImageEx", PANEL, "EditablePanel")
+vgui.Register("AvatarImage", PANEL, "EditablePanel")
