@@ -45,7 +45,7 @@ function PANEL:SetSteamID(SteamID)
 	local SteamID64 = util.SteamIDTo64(SteamID)
 
 	if SteamID64 == "0" then
-		error("Invalid SteamID in SetSteamID")
+		error(Format("Invalid SteamID '%s' in SetSteamID", SteamID))
 	end
 
 	self:SetPlayerSteamID(SteamID64)
@@ -58,7 +58,7 @@ function PANEL:SetSteamID64(SteamID64)
 	local SteamIDTest = util.SteamIDTo64(SteamID)
 
 	if SteamIDTest ~= SteamID64 then
-		error("Invalid SteamID in SetSteamID64")
+		error(Format("Invalid SteamID '%s' ('%s' / '%s') in SetSteamID64", SteamID64, SteamID, SteamIDTest))
 	end
 
 	self:SetPlayerSteamID(SteamID64)
