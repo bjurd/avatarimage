@@ -15,18 +15,16 @@ function Steam.SteamIDToCommunityID(SteamID64)
 	local SteamID = util.SteamIDFrom64(SteamID64)
 
 	if SteamID == "STEAM_0:0:0" then
-		print("bad conversion")
 		return nil
 	end
 
 	local Universe, ID, AccountID = string.match(SteamID, "^STEAM_(%d+):(%d+):(%d+)$")
-	if not Universe then print("no Universe", SteamID) return nil end
+	if not Universe then return nil end
 
 	ID = tonumber(ID)
 	AccountID = tonumber(AccountID)
 
 	if not ID or not AccountID then
-		print("bad tonumber", ID, AccountID)
 		return nil
 	end
 
@@ -78,7 +76,6 @@ function Steam.FetchAvatar(SteamID64, Callback)
 		end
 
 		local AvatarURL = string.match(Data, Steam.PatternAvatar)
-		print("got", AvatarURL)
 		Callback(AvatarURL)
 	end)
 end
