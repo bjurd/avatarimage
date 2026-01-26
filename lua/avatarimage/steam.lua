@@ -9,6 +9,9 @@ Steam.ProfileURL = "https://steamcommunity.com/miniprofile/%s/"
 Steam.DefaultAvatar = "https://avatars.fastly.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg"
 Steam.PatternAvatar = [[<div class="playersection_avatar%s[%s%S]-<img%s+[^>]-src="(https://[^"]-)"[^>]->]]
 
+--- @type table<string, string>
+Steam.AvatarCache = Steam.AvatarCache or {}
+
 --- @param SteamID64 string
 --- @return number|nil
 function Steam.SteamIDToCommunityID(SteamID64)
@@ -69,6 +72,11 @@ end
 --- @param SteamID64 string
 --- @param Callback function
 function Steam.FetchAvatar(SteamID64, Callback)
+	if Steam.AvatarCache[SteamID64] then
+		Callback(Steam.AvatarCache[SteamID64])
+		return
+	end
+
 	Steam.FetchProfile(SteamID64, function(Data)
 		if not isstring(Data) or string.len(Data) < 1 then
 			Callback(nil)
@@ -76,6 +84,12 @@ function Steam.FetchAvatar(SteamID64, Callback)
 		end
 
 		local AvatarURL = string.match(Data, Steam.PatternAvatar)
+		-- AvatarURL = AvatarURL or Steam.DefaultAvatar
+
+		if AvatarURL then
+			Steam.AvatarCache[SteamID64] = AvatarURL
+		end
+
 		Callback(AvatarURL)
 	end)
 end
