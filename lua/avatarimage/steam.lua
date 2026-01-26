@@ -12,6 +12,19 @@ Steam.PatternAvatar = [[<div class="playersection_avatar%s[%s%S]-<img%s+[^>]-src
 --- @type table<string, string>
 Steam.AvatarCache = Steam.AvatarCache or {}
 
+Steam.BotID = "90071996842377216"
+
+
+
+--- @param SteamID64 string
+--- @return boolean
+function Steam.IsBotID(SteamID64)
+	if SteamID64 == "0" then return false end -- -multirun
+	if string.len(SteamID64) ~= 17 then return false end
+
+	return SteamID64 >= Steam.BotID and string.StartsWith(SteamID64, "90071996")
+end
+
 --- @param SteamID64 string
 --- @return number|nil
 function Steam.SteamIDToCommunityID(SteamID64)
@@ -72,8 +85,14 @@ end
 --- @param SteamID64 string
 --- @param Callback function
 function Steam.FetchAvatar(SteamID64, Callback)
-	if Steam.AvatarCache[SteamID64] then
-		Callback(Steam.AvatarCache[SteamID64])
+	local AvatarCache = Steam.AvatarCache
+
+	if Steam.IsBotID(SteamID64) then
+		AvatarCache[SteamID64] = Steam.GetDefaultAvatar()
+	end
+
+	if AvatarCache[SteamID64] then
+		Callback(AvatarCache[SteamID64])
 		return
 	end
 
@@ -87,7 +106,7 @@ function Steam.FetchAvatar(SteamID64, Callback)
 		-- AvatarURL = AvatarURL or Steam.DefaultAvatar
 
 		if AvatarURL then
-			Steam.AvatarCache[SteamID64] = AvatarURL
+			AvatarCache[SteamID64] = AvatarURL
 		end
 
 		Callback(AvatarURL)
