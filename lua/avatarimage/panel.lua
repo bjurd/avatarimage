@@ -39,28 +39,9 @@ function PANEL:SetPlayer(Player)
 	self:SetPlayerSteamID(SteamID64)
 end
 
---- Sets the Panel's SteamID, will be converted to SteamID64
---- @param SteamID string
-function PANEL:SetSteamID(SteamID)
-	local SteamID64 = util.SteamIDTo64(SteamID)
-
-	if SteamID64 == "0" then
-		error(Format("Invalid SteamID '%s' in SetSteamID", SteamID))
-	end
-
-	self:SetPlayerSteamID(SteamID64)
-end
-
---- Sets the Panel's SteamID
+--- Sets the Panel's SteamID, must be a SteamID64
 --- @param SteamID64 string
-function PANEL:SetSteamID64(SteamID64)
-	local SteamID = util.SteamIDFrom64(SteamID64)
-	local SteamIDTest = util.SteamIDTo64(SteamID)
-
-	if SteamIDTest ~= SteamID64 then
-		error(Format("Invalid SteamID '%s' ('%s' / '%s') in SetSteamID64", SteamID64, SteamID, SteamIDTest))
-	end
-
+function PANEL:SetSteamID(SteamID64)
 	self:SetPlayerSteamID(SteamID64)
 end
 
