@@ -65,6 +65,48 @@ function PANEL:EnsureHTML()
 	return HTML
 end
 
+--- @param AvatarURL string
+function PANEL:SetAvatarURL(AvatarURL)
+	local HTML = self:EnsureHTML()
+
+	if not HTML then
+		return
+	end
+
+	HTML:SetHTML([[
+		<!DOCTYPE html>
+		<html>
+			<head>
+				<style>
+					html, body
+					{
+						margin: 0;
+						padding: 0;
+
+						background: transparent;
+						overflow: hidden;
+
+						width: 100%;
+						height: 100%;
+					}
+
+					img
+					{
+						width: 100%;
+						height: 100%;
+
+						object-fit: fill;
+					}
+				</style>
+			</head>
+
+			<body>
+				<img src="]] .. AvatarURL .. [[" />
+			</body>
+		</html>
+	]])
+end
+
 function PANEL:TryLoad()
 	self:SetTryLoad(false)
 	self:SetLoadAttempts(self:GetLoadAttempts() + 1)
@@ -94,13 +136,7 @@ function PANEL:TryLoad()
 			self:SetTryLoad(false)
 		end
 
-		local HTML = self:EnsureHTML()
-
-		if not HTML then
-			return
-		end
-
-		HTML:OpenURL(AvatarURL)
+		self:SetAvatarURL(AvatarURL)
 	end)
 end
 
@@ -115,7 +151,7 @@ function PANEL:LoadAvatar()
 	local HTML = self:EnsureHTML()
 
 	if HTML then
-		HTML:OpenURL(Steam.GetDefaultAvatar())
+		self:SetAvatarURL(Steam.GetDefaultAvatar())
 	end
 
 	if self:GetPlayerSteamID() ~= "0" then
