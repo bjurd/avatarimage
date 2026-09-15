@@ -35,6 +35,11 @@ end
 --- Sets the Panel's SteamID to the SteamID64 of the given Player
 --- @param Player Player
 function PANEL:SetPlayer(Player)
+	if not IsValid(Player) then
+		self:SetPlayerSteamID("0")
+		return
+	end
+
 	local SteamID64 = Player:SteamID64()
 	self:SetPlayerSteamID(SteamID64)
 end
